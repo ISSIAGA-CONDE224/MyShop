@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Cart(),
         ),
-        ChangeNotifierProvider.value(value: Orders(),),
+        ChangeNotifierProvider.value(
+          value: Orders(),
+        ),
       ],
       child: MaterialApp(
           title: 'Ma boutique',
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
           routes: {
             ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
             CartScreen.routeName: (ctx) => CartScreen(),
-            OrdersScreen.routeName: (ctx) =>OrdersScreen()
+            OrdersScreen.routeName: (ctx) => OrdersScreen(),
           }),
     );
   }
