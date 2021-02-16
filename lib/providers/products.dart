@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/widgets/product_item.dart';
+//import 'package:flutter_complete_guide/widgets/product_item.dart';
 
 import './product.dart';
 
@@ -65,8 +65,25 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void addProduct() {
-    print('');
+  void addProduct(Product product) {
+    // Creation du product
+    final newProduct = Product(
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        id: DateTime.now().toString());
+    _items.add(newProduct);
+    //_items.insert(0, newProduct); // si on veux l'inserer au debut du tableau
     notifyListeners();
+  }
+
+  void updateProduct(String id, Product newProduct) {
+    final productIndex = _items.indexWhere((prod) => prod.id == id);
+    if (productIndex >= 0) {
+      _items[productIndex] = newProduct;
+    } else {
+      print('...');
+    }
   }
 }
