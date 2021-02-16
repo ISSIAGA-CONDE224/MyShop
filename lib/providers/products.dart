@@ -66,6 +66,7 @@ class Products with ChangeNotifier {
   }
 
   void addProduct() {
+    print('');
     notifyListeners();
   }
 }
