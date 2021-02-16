@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_complete_guide/widgets/product_item.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import './product.dart';
 
 class Products with ChangeNotifier {
@@ -65,17 +65,30 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     // Creation du product
-    final newProduct = Product(
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        id: DateTime.now().toString());
-    _items.add(newProduct);
-    //_items.insert(0, newProduct); // si on veux l'inserer au debut du tableau
-    notifyListeners();
+    const url =
+        'https://flutter-update-8c99d-default-rtdb.firebaseio.com/products.json';
+    return http
+        .post(url,
+            body: json.encode({
+              'title': product.title,
+              'description': product.description,
+              'imageUrl': product.imageUrl,
+              'price': product.price,
+              'isFavorite': product.isFavorite
+            }))
+        .then((response) {
+      final newProduct = Product(
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl,
+          id: json.decode(response.body)['name']);
+      _items.add(newProduct);
+      //_items.insert(0, newProduct); // si on veux l'inserer au debut du tableau
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Product newProduct) {
@@ -85,5 +98,10 @@ class Products with ChangeNotifier {
     } else {
       print('...');
     }
+  }
+
+  void deleteProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
   }
 }
